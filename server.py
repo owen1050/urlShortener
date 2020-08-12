@@ -9,6 +9,7 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
     
     def do_GET(self):
         global host
+        reply = ""
         if(self.path.find("newURL") > 0):
 
             path = self.path
@@ -26,21 +27,22 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
             self.end_headers()
 
             self.addToUrls(url, short)
-            retStr = "Will now foreward " + host + short + " to " + url
+            reply = "Will now foreward " + host + short + " to " + url
 
-            self.wfile.write(retStr.encode())
         else:
             path = self.path[1:]
 
             urls = self.getUrls()
             print(path, urls, path in urls)
             if path in urls:
+
                 self.send_response(302)
                 self.send_header("Status", "302 Found")
                 self.send_header("Location", urls[path])
                 self.end_headers()
 
-                self.wfile.write("red".encode())
+                reply = "redireted to " + urls[path]
+                print("302 redirect")
             else:
                 self.send_response(200)
                 self.send_header("content-type", "text/html")
@@ -48,7 +50,9 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
                 f = open("main.html", "r")
                 page = f.read()
                 f.close()
-                self.wfile.write(page.encode())
+                reply = page
+        print(reply)
+        self.wfile.write(reply.encode())
 
     def addToUrls(self, url, short):
         f = open("database.txt", "r")

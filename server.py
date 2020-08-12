@@ -36,6 +36,7 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
             print(path, urls, path in urls)
             if path in urls:
                 self.send_response(302)
+                self.send_header("Status", "302 Found")
                 self.send_header("Location", urls[path])
                 self.end_headers()
 
@@ -77,10 +78,6 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
 
 server_address = ('',5432)     
 httpd = HTTPServer(server_address, urlShortHttpServer)
-dir_path = os.path.dirname(os.path.realpath(__file__))
-httpd.socket = ssl.wrap_socket (httpd.socket,
-        keyfile=dir_path+"/server.key",
-        certfile=dir_path+"/server.cert", server_side=True)
 print('running server...')        
 try:         
     httpd.serve_forever()     

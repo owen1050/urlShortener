@@ -34,13 +34,11 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
             urls = self.getUrls()
             print(path, urls, path in urls)
             if path in urls:
-                self.send_response(200)
-                self.send_header("content-type", "text/html")
+                self.send_response(302)
+                self.send_header("Location", urls[path])
                 self.end_headers()
 
-                ret = "<head> <meta http-equiv=\"Refresh\" content=\"0; URL=" + urls[path]+"\"> </head>"
-
-                self.wfile.write(ret.encode())
+                self.wfile.write("red".encode())
             else:
                 self.send_response(200)
                 self.send_header("content-type", "text/html")

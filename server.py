@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib, ssl, os
 
 
-host = "http://owenbusler.com/"
+host = "http://short.owenbusler.com/"
 
 class urlShortHttpServer(BaseHTTPRequestHandler):
     
@@ -25,9 +25,13 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("content-type", "text/plain")
             self.end_headers()
-
-            self.addToUrls(url, short)
-            reply = "Will now foreward " + host + short + " to " + url
+            
+            shorts = self.getUrls()
+            if(short in shorts):
+                reply = "ALready used, pick a new name"
+            else:
+                self.addToUrls(url, short)
+                reply = "Will now foreward " + host + short + " to " + url
 
         else:
             path = self.path[1:]
@@ -36,8 +40,8 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
             print(path, urls, path in urls)
             if path in urls:
 
-                self.send_response(302)
-                self.send_header("Status", "302 Found")
+                self.send_response(301)
+                self.send_header("Status", "301 Found")
                 self.send_header("Location", urls[path])
                 self.end_headers()
 

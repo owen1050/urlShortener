@@ -1,6 +1,7 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import urllib
+import urllib, ssl, os
+
 
 host = "http://owenbusler.com/"
 
@@ -74,8 +75,12 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
         return retDict
 
 
-server_address = ('',23655)     
+server_address = ('',5432)     
 httpd = HTTPServer(server_address, urlShortHttpServer)
+dir_path = os.path.dirname(os.path.realpath(__file__))
+httpd.socket = ssl.wrap_socket (httpd.socket,
+        keyfile=dir_path+"/server.key",
+        certfile=dir_path+"/server.cert", server_side=True)
 print('running server...')        
 try:         
     httpd.serve_forever()     

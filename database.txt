@@ -1,1 +1,3 @@
 google|http://google.com
+face|https://www.facebook.com/
+owen|https://www.linkedin.com/in/owenbusler/

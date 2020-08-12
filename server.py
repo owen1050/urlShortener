@@ -8,15 +8,7 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
     
     def do_GET(self):
         global host
-        if(self.path == "/urlshortener"):
-            self.send_response(200)
-            self.send_header("content-type", "text/html")
-            self.end_headers()
-            f = open("main.html", "r")
-            page = f.read()
-            f.close()
-            self.wfile.write(page.encode())
-        elif(self.path.find("newURL") > 0):
+        if(self.path.find("newURL") > 0):
 
             path = self.path
             path = urllib.parse.unquote(path)
@@ -51,9 +43,12 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
                 self.wfile.write(ret.encode())
             else:
                 self.send_response(200)
-                self.send_header("content-type", "text/plain")
+                self.send_header("content-type", "text/html")
                 self.end_headers()
-                self.wfile.write("unknown url".encode())
+                f = open("main.html", "r")
+                page = f.read()
+                f.close()
+                self.wfile.write(page.encode())
 
     def addToUrls(self, url, short):
         f = open("database.txt", "r")
@@ -81,7 +76,7 @@ class urlShortHttpServer(BaseHTTPRequestHandler):
         return retDict
 
 
-server_address = ('',23654)     
+server_address = ('',23655)     
 httpd = HTTPServer(server_address, urlShortHttpServer)
 print('running server...')        
 try:         

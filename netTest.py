@@ -14,7 +14,7 @@ pingsOver100 = 0
 
 while True:
     
-    a = str(subprocess.run("ping -n 1 " + ip, stdout=subprocess.PIPE, stderr=subprocess.PIPE))
+    a = str(subprocess.run("ping -c 1 " + ip,shell = True,  stdout=subprocess.PIPE, stderr=subprocess.PIPE))
    # print(a)
     if a.find("timed out") > 0:
         timeout = timeout + 1
@@ -22,8 +22,8 @@ while True:
     else:
         pings = pings + 1
         i0 = a.find("time=") + 5
-        i1 = a.find("ms", i0)
-        cp = int(a[i0:i1])
+        i1 = a.find("ms", i0)-1
+        cp = float(a[i0:i1])
         totalPing = totalPing + cp
 
         if cp > 100:
